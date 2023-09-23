@@ -4,6 +4,8 @@ import 'package:flutter_train/pages/my_page.dart';
 import 'package:flutter_train/pages/search_page.dart';
 import 'package:flutter_train/pages/travel_page.dart';
 
+import '../test/test_page.dart';
+
 class TabNavigator extends StatefulWidget {
   const TabNavigator({super.key});
 
@@ -26,6 +28,7 @@ class _TabNavigatorState extends State<TabNavigator> {
           SearchPage(),
           TravelPage(),
           MyPage(),
+          TestPage(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -82,6 +85,17 @@ class _TabNavigatorState extends State<TabNavigator> {
               color: _activeColor,
             ),
             label: '我的',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.apple,
+              color: _defaultColor,
+            ),
+            activeIcon: Icon(
+              Icons.apple,
+              color: _activeColor,
+            ),
+            label: '学习',
           ),
         ],
       ),
