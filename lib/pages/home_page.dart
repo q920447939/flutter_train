@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
+import 'package:flutter_train/dao/home_dao.dart';
+import 'package:flutter_train/model/home_model.dart';
+
+import '../model/common_model.dart';
+import '../widget/local_nav.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,12 +15,27 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List _imageUrls = [
-    'https://img2.woyaogexing.com/2023/09/21/8f92f263d2250741f40635e4f083b15a.png',
-    'https://img2.woyaogexing.com/2023/09/21/b6360547deff023b77895eba53f261fc.jpg',
-    'https://img2.woyaogexing.com/2023/09/21/8f92f263d2250741f40635e4f083b15a.png'
+    'http://img2.woyaogexing.com/2023/09/21/8f92f263d2250741f40635e4f083b15a.png',
+    'http://img2.woyaogexing.com/2023/09/21/b6360547deff023b77895eba53f261fc.jpg',
+    'http://img2.woyaogexing.com/2023/09/21/8f92f263d2250741f40635e4f083b15a.png'
   ];
   double opacity = 0;
   double MAX_APPBAR_OPACITY = 100;
+  String resultString = "";
+  List<CommonModel> localNavList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    this._loadData();
+  }
+
+  void _loadData() async {
+    HomeModel? homeModel = await HomeDao.fetch();
+    setState(() {
+      localNavList = homeModel!.localNavList;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,12 +71,9 @@ class _HomePageState extends State<HomePage> {
                     pagination: const SwiperPagination(),
                   ),
                 ),
-                Container(
-                  height: 800,
-                  child: ListTile(
-                    title: Text('哈哈'),
-                  ),
-                )
+                LocalNav(
+                  localNavList: localNavList,
+                ),
               ],
             ),
           )),
