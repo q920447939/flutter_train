@@ -40,55 +40,59 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color(0xfff2f2f2),
         //MediaQuery.removePadding  移除padding
         body: Stack(children: [
-      MediaQuery.removePadding(
-          removeTop: true,
-          context: context,
-          //NotificationListener 监听滚动
-          child: NotificationListener(
-            onNotification: (notification) {
-              //当滚动时调用 ,如果没有滚动则不触发 ,并且只监听第一个元素的滚动，也就是ListView
-              if (notification is ScrollUpdateNotification &&
-                  notification.depth == 0) {
-                _onScroll(notification.metrics.pixels);
-              }
-              return true;
-            },
-            child: ListView(
-              children: [
-                Container(
-                  height: 160,
-                  child: Swiper(
-                    itemCount: _imageUrls.length,
-                    autoplay: true,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Image.network(
-                        _imageUrls[index],
-                        fit: BoxFit.fill,
-                      );
-                    },
-                    pagination: const SwiperPagination(),
-                  ),
+          MediaQuery.removePadding(
+              removeTop: true,
+              context: context,
+              //NotificationListener 监听滚动
+              child: NotificationListener(
+                onNotification: (notification) {
+                  //当滚动时调用 ,如果没有滚动则不触发 ,并且只监听第一个元素的滚动，也就是ListView
+                  if (notification is ScrollUpdateNotification &&
+                      notification.depth == 0) {
+                    _onScroll(notification.metrics.pixels);
+                  }
+                  return true;
+                },
+                child: ListView(
+                  children: [
+                    Container(
+                      height: 160,
+                      child: Swiper(
+                        itemCount: _imageUrls.length,
+                        autoplay: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Image.network(
+                            _imageUrls[index],
+                            fit: BoxFit.fill,
+                          );
+                        },
+                        pagination: const SwiperPagination(),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(7, 4, 7, 4),
+                      child: LocalNav(
+                        localNavList: localNavList,
+                      ),
+                    )
+                  ],
                 ),
-                LocalNav(
-                  localNavList: localNavList,
-                ),
-              ],
-            ),
-          )),
-      Opacity(
-          opacity: opacity,
-          child: Container(
-            height: 80,
-            decoration: BoxDecoration(color: Colors.white),
-            child: Center(
-                child: Padding(
-              padding: EdgeInsets.only(top: 20),
-              child: Text('首页'),
-            )),
-          ))
-    ]));
+              )),
+          Opacity(
+              opacity: opacity,
+              child: Container(
+                height: 80,
+                decoration: BoxDecoration(color: Colors.white),
+                child: Center(
+                    child: Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: Text('首页'),
+                )),
+              ))
+        ]));
   }
 
   void _onScroll(double offset) {
