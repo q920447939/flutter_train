@@ -5,6 +5,7 @@ import 'package:flutter_train/model/home_model.dart';
 
 import '../model/common_model.dart';
 import '../widget/local_nav.dart';
+import '../widget/webview.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -76,6 +77,22 @@ class _HomePageState extends State<HomePage> {
                       padding: EdgeInsets.fromLTRB(7, 4, 7, 4),
                       child: LocalNav(
                         localNavList: localNavList,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (_) {
+                          return WebViewPage(
+                              hideAppBar: false,
+                              title: 'title',
+                              url: 'https://www.google.com', // 修正 URL
+                              backgroundColor: Colors.grey,
+                              backButtonColor: Colors.green);
+                        }));
+                      },
+                      child: Text(
+                        '跳轉到google',
+                        style: TextStyle(color: Colors.red, fontSize: 20),
                       ),
                     )
                   ],
