@@ -24,6 +24,7 @@ class WebViewPage extends StatefulWidget {
 
 class _WebViewPageState extends State<WebViewPage> {
   late WebViewController _controller;
+  bool loadFinish = false;
 
   @override
   void initState() {
@@ -50,27 +51,34 @@ class _WebViewPageState extends State<WebViewPage> {
           onProgress: (int progress) {
             debugPrint('WebView is loading (progress : $progress%)');
           },
-          onPageStarted: (String url) {
-            debugPrint('Page started loading: $url');
-          },
+          onPageStarted: (String url) {},
           onPageFinished: (String url) {
-            debugPrint('Page finished loading: $url');
+            setState(() {
+              loadFinish = true;
+            });
           },
           onWebResourceError: (WebResourceError error) {
             debugPrint('''
-Page resource error:
-  code: ${error.errorCode}
-  description: ${error.description}
-  errorType: ${error.errorType}
-  isForMainFrame: ${error.isForMainFrame}
+              Page resource error:
+                code: ${error.errorCode}
+                description: ${error.description}
+                errorType: ${error.errorType}
+                isForMainFrame: ${error.isForMainFrame}
           ''');
+            loadFinish = true;
           },
           onNavigationRequest: (NavigationRequest request) {
-            if (request.url.startsWith('https://www.youtube.com/')) {
-              debugPrint('blocking navigation to ${request.url}');
-              return NavigationDecision.prevent;
-            }
-            debugPrint('allowing navigation to ${request.url}');
+            // 获取当前WebView的URL
+            final currentUrl = widget.url;
+
+            // 检查请求的URL是否与当前URL不同
+            //if (request.url != currentUrl) {
+            //   debugPrint('Blocking navigation to ${request.url}');
+            //   return NavigationDecision.prevent;
+            // }
+
+            // 允许加载其他情况下的URL
+            debugPrint('Allowing navigation to ${request.url}');
             return NavigationDecision.navigate;
           },
           onUrlChange: (UrlChange change) {
@@ -78,19 +86,11 @@ Page resource error:
           },
         ),
       )
-      ..addJavaScriptChannel(
-        'Toaster',
-        onMessageReceived: (JavaScriptMessage message) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(message.message)),
-          );
-        },
-      )
       ..loadRequest(Uri.parse(widget.url));
 
     // #docregion platform_features
     if (controller.platform is AndroidWebViewController) {
-      AndroidWebViewController.enableDebugging(true);
+      //AndroidWebViewController.enableDebugging(true);
       (controller.platform as AndroidWebViewController)
           .setMediaPlaybackRequiresUserGesture(false);
     }
@@ -101,11 +101,18 @@ Page resource error:
 
   @override
   Widget build(BuildContext context) {
+    String statusBarColor = "ffffff";
+    Color backButtonColor;
+    if (statusBarColor == "ffffff") {
+      backButtonColor = Colors.green;
+    } else {
+      backButtonColor = Colors.red;
+    }
     //webview插件
     return Scaffold(
       body: Column(
         children: [
-          _appBar(widget.statusBarColor, Colors.black54),
+          _appBar(widget.statusBarColor, backButtonColor),
           Expanded(
             child: WebViewWidget(controller: _controller),
           )
@@ -123,33 +130,36 @@ Page resource error:
     }
     return Container(
       color: backgroundColor,
-      padding: const EdgeInsets.fromLTRB(0, 40, 0, 10),
+      padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
       child: FractionallySizedBox(
         child: Stack(
           children: [
-            GestureDetector(
-              onTap: () {
-                print("click....0");
-                _controller.goBack();
-              },
-              child: Container(
-                margin: EdgeInsets.only(left: 5),
-                child: Icon(
-                  Icons.close,
-                  size: 26,
-                  color: backButtonColor,
-                ),
-              ),
-            ),
-            Positioned(
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: Text(
-                    widget.title ?? "",
-                    style: TextStyle(color: backButtonColor, fontSize: 20),
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    margin: EdgeInsets.fromLTRB(
+                        5, 5, 0, 0), // Adjust the left margin
+                    child: Icon(
+                      Icons.close,
+                      size: 20,
+                      color: backButtonColor,
+                    ),
                   ),
-                ))
+                ),
+                Expanded(
+                  child: Center(
+                    child: Text(
+                      widget.title ?? "",
+                      style: TextStyle(color: backButtonColor, fontSize: 20),
+                    ),
+                  ),
+                )
+              ],
+            )
           ],
         ),
       ),
