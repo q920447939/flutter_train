@@ -2,14 +2,14 @@ class CommonModel {
   String icon;
   String title;
   String url;
-  String? statusBarColor;
+  String statusBarColor;
   bool? hideAppBar;
 
   CommonModel(
       {required this.icon,
       required this.title,
       required this.url,
-      this.statusBarColor,
+      required this.statusBarColor,
       this.hideAppBar});
 
   factory CommonModel.fromJson(Map<String, dynamic> json) {
@@ -17,7 +17,7 @@ class CommonModel {
         icon: json['icon'] ?? '',
         title: json['title'] ?? '',
         url: json['url'] ?? '',
-        statusBarColor: json['statusBarColor'],
-        hideAppBar: json['hideAppBar']);
+        statusBarColor: json['statusBarColor'] ?? '',
+        hideAppBar: json['hideAppBar'] ?? true);
   }
 }

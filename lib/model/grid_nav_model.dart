@@ -1,11 +1,12 @@
 import 'package:flutter_train/model/common_model.dart';
 
 class GridNavModel {
-  GridNavItemModel? hotel;
-  GridNavItemModel? flight;
-  GridNavItemModel? travel;
+  GridNavItemModel hotel;
+  GridNavItemModel flight;
+  GridNavItemModel travel;
 
-  GridNavModel({this.hotel, this.flight, this.travel});
+  GridNavModel(
+      {required this.hotel, required this.flight, required this.travel});
 
   factory GridNavModel.fromJson(Map<String, dynamic> json) {
     return GridNavModel(
@@ -17,22 +18,22 @@ class GridNavModel {
 }
 
 class GridNavItemModel {
-  String? startColor;
-  String? endColor;
-  CommonModel? mainItem;
-  CommonModel? item1;
-  CommonModel? item2;
-  CommonModel? item3;
-  CommonModel? item4;
+  String startColor;
+  String endColor;
+  CommonModel mainItem;
+  CommonModel item1;
+  CommonModel item2;
+  CommonModel item3;
+  CommonModel item4;
 
   GridNavItemModel(
-      {this.startColor,
-      this.endColor,
-      this.mainItem,
-      this.item1,
-      this.item2,
-      this.item3,
-      this.item4});
+      {required this.startColor,
+      required this.endColor,
+      required this.mainItem,
+      required this.item1,
+      required this.item2,
+      required this.item3,
+      required this.item4});
 
   factory GridNavItemModel.fromJson(Map<String, dynamic> json) {
     return GridNavItemModel(

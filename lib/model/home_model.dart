@@ -8,16 +8,16 @@ class HomeModel {
   ConfigModel? config;
   List<CommonModel>? bannerList;
   List<CommonModel> localNavList;
-  GridNavModel? gridNav;
-  List<CommonModel>? subNavList;
+  GridNavModel gridNav;
+  List<CommonModel> subNavList;
   SalesBoxModel? salesBox;
 
   HomeModel(
       {this.config,
       this.bannerList,
       required this.localNavList,
-      this.gridNav,
-      this.subNavList,
+      required this.gridNav,
+      required this.subNavList,
       this.salesBox});
 
   factory HomeModel.fromJson(Map<String, dynamic> json) {

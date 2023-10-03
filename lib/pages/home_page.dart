@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 import 'package:flutter_train/dao/home_dao.dart';
 import 'package:flutter_train/model/home_model.dart';
+import 'package:flutter_train/widget/sub_nav.dart';
 
 import '../model/common_model.dart';
+import '../model/grid_nav_model.dart';
+import '../widget/grid_nav.dart';
 import '../widget/local_nav.dart';
-import '../widget/webview.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,6 +26,8 @@ class _HomePageState extends State<HomePage> {
   double MAX_APPBAR_OPACITY = 100;
   String resultString = "";
   List<CommonModel> localNavList = [];
+  GridNavModel? gridNav;
+  List<CommonModel> subNavList = [];
 
   @override
   void initState() {
@@ -35,6 +39,10 @@ class _HomePageState extends State<HomePage> {
     HomeModel? homeModel = await HomeDao.fetch();
     setState(() {
       localNavList = homeModel!.localNavList;
+      gridNav = homeModel!.gridNav;
+      print("subNavList.length===111+" + subNavList.length.toString());
+      subNavList = homeModel.subNavList;
+      print("subNavList.length===+" + subNavList.length.toString());
     });
   }
 
@@ -79,22 +87,18 @@ class _HomePageState extends State<HomePage> {
                         localNavList: localNavList,
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (_) {
-                          return WebViewPage(
-                              hideAppBar: false,
-                              title: 'title',
-                              url: 'https://www.google.com', // 修正 URL
-                              backgroundColor: Colors.grey,
-                              backButtonColor: Colors.green);
-                        }));
-                      },
-                      child: Text(
-                        '跳轉到google',
-                        style: TextStyle(color: Colors.red, fontSize: 20),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
+                      child: GridNav(
+                        gridNavModel: gridNav,
                       ),
-                    )
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
+                      child: SubNav(
+                        subNavList: subNavList,
+                      ),
+                    ),
                   ],
                 ),
               )),

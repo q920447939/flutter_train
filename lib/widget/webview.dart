@@ -9,16 +9,14 @@ class WebViewPage extends StatefulWidget {
   final bool hideAppBar;
   final String title;
   final String url;
-  final Color backgroundColor;
-  final Color backButtonColor;
+  final Color statusBarColor;
 
   const WebViewPage(
       {super.key,
       required this.hideAppBar,
       required this.title,
       required this.url,
-      required this.backgroundColor,
-      required this.backButtonColor});
+      required this.statusBarColor});
 
   @override
   State<WebViewPage> createState() => _WebViewPageState();
@@ -88,7 +86,7 @@ Page resource error:
           );
         },
       )
-      ..loadRequest(Uri.parse('https://flutter.dev'));
+      ..loadRequest(Uri.parse(widget.url));
 
     // #docregion platform_features
     if (controller.platform is AndroidWebViewController) {
@@ -107,7 +105,7 @@ Page resource error:
     return Scaffold(
       body: Column(
         children: [
-          _appBar(widget.backgroundColor, widget.backButtonColor),
+          _appBar(widget.statusBarColor, Colors.black54),
           Expanded(
             child: WebViewWidget(controller: _controller),
           )
@@ -124,12 +122,18 @@ Page resource error:
       );
     }
     return Container(
+      color: backgroundColor,
+      padding: const EdgeInsets.fromLTRB(0, 40, 0, 10),
       child: FractionallySizedBox(
         child: Stack(
           children: [
             GestureDetector(
+              onTap: () {
+                print("click....0");
+                _controller.goBack();
+              },
               child: Container(
-                margin: EdgeInsets.only(left: 10),
+                margin: EdgeInsets.only(left: 5),
                 child: Icon(
                   Icons.close,
                   size: 26,
