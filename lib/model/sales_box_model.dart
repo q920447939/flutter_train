@@ -1,24 +1,24 @@
 import 'package:flutter_train/model/common_model.dart';
 
 class SalesBoxModel {
-  String? icon;
-  String? moreUrl;
-  CommonModel? bigCard1;
-  CommonModel? bigCard2;
-  CommonModel? smallCard1;
-  CommonModel? smallCard2;
-  CommonModel? smallCard3;
-  CommonModel? smallCard4;
+  String icon;
+  String moreUrl;
+  CommonModel bigCard1;
+  CommonModel bigCard2;
+  CommonModel smallCard1;
+  CommonModel smallCard2;
+  CommonModel smallCard3;
+  CommonModel smallCard4;
 
   SalesBoxModel(
-      {this.icon,
-      this.moreUrl,
-      this.bigCard1,
-      this.bigCard2,
-      this.smallCard1,
-      this.smallCard2,
-      this.smallCard3,
-      this.smallCard4});
+      {required this.icon,
+      required this.moreUrl,
+      required this.bigCard1,
+      required this.bigCard2,
+      required this.smallCard1,
+      required this.smallCard2,
+      required this.smallCard3,
+      required this.smallCard4});
 
   factory SalesBoxModel.fromJson(Map<String, dynamic> json) {
     return SalesBoxModel(
