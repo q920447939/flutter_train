@@ -1,14 +1,14 @@
 class TravelItemModel {
   int? totalCount;
-  List<TravelItem>? resultList = [];
+  List<TravelItem> resultList = [];
 
-  TravelItemModel({this.totalCount, this.resultList});
+  TravelItemModel({this.totalCount, required this.resultList});
 
   TravelItemModel.fromJson(Map<String, dynamic> json) {
     totalCount = json['totalCount'];
     if (json['resultList'] != null) {
       json['resultList'].forEach((v) {
-        resultList?.add(new TravelItem.fromJson(v));
+        resultList.add(new TravelItem.fromJson(v));
       });
     }
   }

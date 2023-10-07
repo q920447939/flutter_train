@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import '../model/travel_tab_model.dart';
 
 const HOME_URL =
-    "https://www.geekailab.com/io/flutter_app/json/travel_page.json";
+    "http://192.168.1.144:18088/io/flutter_app/json/travel_page.json";
 
 ///旅拍类别结构
 class TravelTabDao {
