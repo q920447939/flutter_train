@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_train/test/flutter_staggered_grid_view_page.dart';
 
 import 'expansion_city_name_page.dart';
 import 'grid_view_city_name_page.dart';
@@ -44,7 +45,12 @@ class _TestPageState extends State<TestPage> {
             (_) => ListViewCityNameRefreshPage(
                   APPBAR_NAME: '基于listView垂直方向上拉加载和下拉刷新',
                 ),
-            '基于listView垂直方向上拉加载和下拉刷新')
+            '基于listView垂直方向上拉加载和下拉刷新'),
+        _buildElevatedButton(
+            (_) => FlutterStaggeredGridViewPage(
+                  APPBAR_NAME: '在 Flutter 中使用交错网格视图创建瀑布流布局',
+                ),
+            '在 Flutter 中使用交错网格视图创建瀑布流布局')
       ],
     );
   }

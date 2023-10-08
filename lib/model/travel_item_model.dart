@@ -27,18 +27,20 @@ class TravelItemModel {
 class TravelItem {
   int? type;
   Article? article;
-
-  TravelItem({this.type, this.article});
+  double? height;
+  TravelItem({this.type, this.article, this.height});
 
   TravelItem.fromJson(Map<String, dynamic> json) {
     type = json['type'];
     article =
         json['article'] != null ? new Article.fromJson(json['article']) : null;
+    height = json['height'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['type'] = this.type;
+    data['height'] = this.height;
     final article = this.article;
     if (article != null) {
       data['article'] = article.toJson();

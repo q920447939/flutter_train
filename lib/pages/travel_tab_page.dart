@@ -19,7 +19,7 @@ class TravelTabPage extends StatefulWidget {
 }
 
 class _TravelTabPageState extends State<TravelTabPage>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late List<TravelItem> _travelItemList = [];
   int pageIndex = 1;
 
@@ -56,21 +56,35 @@ class _TravelTabPageState extends State<TravelTabPage>
 
   @override
   Widget build(BuildContext context) {
+    if (_travelItemList.isEmpty || _travelItemList.length <= 0) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     return Scaffold(
-      body: MasonryGridView.count(
-          scrollDirection: Axis.horizontal, //水平方向
-          crossAxisCount: 2, // 几列
-          mainAxisSpacing: 3, // 间距
-          crossAxisSpacing: 3,
-          itemCount: _travelItemList.length,
-          shrinkWrap: true, // 是否收缩
-          physics: const NeverScrollableScrollPhysics(), // 禁止左右滑动
-          itemBuilder: (context, index) {
-            return TravelItemCard(
-                index: index, travelItem: _travelItemList[index]);
-          }),
-    );
+        body: MasonryGridView.count(
+      padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 10),
+      // the number of columns
+      crossAxisCount: 2,
+      // vertical gap between two items
+      mainAxisSpacing: 2,
+      // horizontal gap between two items
+      crossAxisSpacing: 2,
+      itemCount: _travelItemList.length,
+      shrinkWrap: true, // 是否收缩
+      physics: const NeverScrollableScrollPhysics(), // 禁止左右滑动
+      itemBuilder: (context, index) {
+        return Card(
+          child:
+              TravelItemCard(index: index, travelItem: _travelItemList[index]),
+        );
+      },
+    ));
   }
+
+  //防止页面数据回收，但是加载数据太多会占用太多的内存
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class TravelItemCard extends StatelessWidget {
@@ -81,9 +95,11 @@ class TravelItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        /*Navigator.push(context, MaterialPageRoute(
+    return SizedBox(
+      height: travelItem.height,
+      child: GestureDetector(
+        onTap: () {
+          /*Navigator.push(context, MaterialPageRoute(
           builder: (context) {
             return WebViewPage(
                 hideAppBar: false,
@@ -92,14 +108,25 @@ class TravelItemCard extends StatelessWidget {
                 statusBarColor: Colors.white);
           },
         ));*/
-      },
-      child: Card(
+        },
         child: PhysicalModel(
           color: Colors.transparent,
           clipBehavior: Clip.antiAlias,
           borderRadius: BorderRadius.circular(5),
           child: Column(
-            children: [_itemCard()],
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _itemCard(),
+              Container(
+                  padding: EdgeInsets.all(4),
+                  child: Text(
+                    travelItem.article?.articleTitle ?? "",
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.black87, fontSize: 14),
+                  )),
+              _bottomInfo(travelItem)
+            ],
           ),
         ),
       ),
@@ -115,8 +142,8 @@ class TravelItemCard extends StatelessWidget {
           ),
         ),
         Positioned(
-            bottom: 8,
-            left: 8,
+            bottom: 5,
+            left: 5,
             child: Container(
               padding: EdgeInsets.fromLTRB(5, 1, 5, 1),
               decoration: BoxDecoration(
@@ -147,10 +174,59 @@ class TravelItemCard extends StatelessWidget {
   }
 
   String _position(TravelItem travelItem) {
-    if (null == travelItem.article!.pois! ||
-        travelItem.article!.pois!.length <= 0) {
+    if (travelItem.article!.pois!.length <= 0) {
       return "";
     }
     return travelItem.article!.pois![0].poiName ?? "未知";
+  }
+
+  _bottomInfo(TravelItem travelItem) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(6, 0, 6, 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              PhysicalModel(
+                color: Colors.transparent,
+                clipBehavior: Clip.antiAlias,
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                  travelItem.article!.images?[0].dynamicUrl ?? "",
+                  width: 24,
+                  height: 24,
+                  //宽高设置 裁切的两倍才能裁切出一个圆形
+                ),
+              )
+            ],
+          ),
+          Container(
+            width: 90,
+            padding: EdgeInsets.fromLTRB(0, 0, 2, 2),
+            child: Text(
+              travelItem.article!.author!.nickName ?? "",
+              style: TextStyle(fontSize: 10, color: Colors.grey),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          Row(
+            children: [
+              Icon(
+                Icons.thumb_up,
+                size: 12,
+                color: Colors.grey,
+              ),
+              Padding(padding: EdgeInsets.only(left: 4)),
+              Text(
+                "111",
+                style: TextStyle(fontSize: 10, color: Colors.grey),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
